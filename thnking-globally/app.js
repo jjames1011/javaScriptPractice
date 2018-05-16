@@ -15,7 +15,10 @@ const randomizeBothButton = document.getElementById('randomizeBoth');
 
 //event handlers :
 const randomRGB = () => {
-  return `rgb(${Math.floor(Math.random()* 255)},${Math.floor(Math.random()* 255)},${Math.floor(Math.random()* 255)})`
+  const rand = `rgba(${Math.floor(Math.random()* 255)},${Math.floor(Math.random()* 255)},${Math.floor(Math.random()* 255)},${Math.random()})`;
+  console.log(rand);
+  return rand;
+
 }
 headlineButton.addEventListener('click', () => {
   headerElement.style.color = headerInput.value;
