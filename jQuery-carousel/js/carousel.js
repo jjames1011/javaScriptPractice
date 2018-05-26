@@ -21,7 +21,6 @@ $nextButton.on('click', () => {
   } else {
   imageIndex += 1;
   }
-  console.log(imageIndex);
   $img.attr('src', `images/${images[imageIndex]}`);
 });
 
@@ -32,7 +31,6 @@ $prevButton.on('click', () => {
   }else{
     imageIndex -= 1;
   }
-  console.log(imageIndex);
   $img.attr('src', `images/${images[imageIndex]}`);
 })
 
