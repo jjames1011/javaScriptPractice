@@ -7,7 +7,8 @@
 
 //require http module
 const http = require('http');
-const APIKEY = '4c2ad1606fe03e0aad188c27c4b82ccb';
+const api = require('./api.json');
+const APIKEY = api.key;
 
 function printError(error){
   console.error(error.message);
