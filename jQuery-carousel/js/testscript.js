@@ -2,7 +2,7 @@ const $div = $('#my-content');
 $div.slick({
   arrows: false,
   dots: true,
-  slidesToShow: 3,
+  slidesToShow: 2,
   centerPadding: '50px',
   cssEase: 'ease',
   dotsClass: 'slick-dots',
