@@ -1,6 +1,9 @@
 //create a command line application that allows for checking the weather
 //api: http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID={APIKEY}
 //api key: 4c2ad1606fe03e0aad188c27c4b82ccb
+//to use go to directory and run this file with node followed by a zip code or city name:
+// $node scripts.js portland
+// $node scripts.js 97217
 
 //require http module
 const http = require('http');
