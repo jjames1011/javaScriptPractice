@@ -1,22 +1,35 @@
 const Profile = require("./profile.js");
 const renderer = require('./renderer.js');
 const commonHeader = {'Content-Type': 'text/html'}
+const querystring = require('querystring');
 
 //Handle HTTP route GET / and POST / i.e. Home
 function home(request, response){
   // response.statusCode = 200;
   //if url === "/" && GET
   if(request.url === '/'){
+    if(request.method.toLowerCase() === 'get'){
     //show search
     response.writeHead(200, commonHeader);
     renderer.view('header', {} , response);
     renderer.view('search', {}, response);
     renderer.view('footer', {}, response);
     response.end();
-  }
-    //response.end('Hello World\n');
-  //if url === "/" && POST
+  } else {
+    //if url === "/" && POST
+    //get the post data from body
+    request.on('data', function(postBody){
+      let query = querystring.parse(postBody.toString());
+      response.writeHead(303, {'location':'/'+query.username});
+      response.end();
+    });
+
+    //extract the username
     //redirect to /:username
+
+  }
+}
+
 }
 //Handle HTTP route GET /:username i.e. /chalkers
 function user(request, response){
