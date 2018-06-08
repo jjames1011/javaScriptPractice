@@ -18,4 +18,4 @@ $('.main-heading').on('sticky-end', function () {
   });
 });
 
-var foobar = yay;
+console.log('I am the new main.js file!');
