@@ -9,6 +9,7 @@ const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
 const maps = require('gulp-sourcemaps');
+const del = require('del');
 
 
 //concat multiple js files into just one file for quicker loading
@@ -23,26 +24,38 @@ gulp.task('concatScripts', () => {
     .pipe(gulp.dest('js'));
 });
 
-//minify (compress) js for quicker loading
-gulp.task('minifyjs', ['concatScripts'], () => {
-  //this app.js file will have been produced by the task above
-  return gulp.src('js/app.js')
-  .pipe(uglify())
-  .pipe(rename('app.min.js'))
-  .pipe(gulp.dest('js'));
+gulp.task("minifyScripts", ["concatScripts"], function() {
+  return gulp.src("js/app.js")
+    .pipe(uglify())
+    .pipe(rename('app.min.js'))
+    .pipe(gulp.dest('js'));
 });
 
-gulp.task('compileSass', () => {
-  return gulp.src('scss/application.scss')
-  .pipe(maps.init())
-  .pipe(sass())
-  .pipe(maps.write('./'))
-  .pipe(gulp.dest('css'));
-
+gulp.task('compileSass', function() {
+  return gulp.src("scss/application.scss")
+      .pipe(maps.init())
+      .pipe(sass())
+      .pipe(maps.write('./'))
+      .pipe(gulp.dest('css'));
 });
-gulp.task('build', ['minifyjs', 'compileSass']);
 
+gulp.task('watchFiles', function() {
+  gulp.watch('scss/**/*.scss', ['compileSass']);
+  gulp.watch('js/main.js', ['concatScripts']);
+})
 
-//run gulp default with the command $ gulp
-//second parameter is an array of other tasks or dependency
-gulp.task('default', ['build']);
+gulp.task('clean', function() {
+  del(['dist', 'css/application.css*', 'js/app*.js*']);
+});
+
+gulp.task("build", ['minifyScripts', 'compileSass'], function() {
+  return gulp.src(["css/application.css", "js/app.min.js", 'index.html',
+                   "img/**", "fonts/**"], { base: './'})
+            .pipe(gulp.dest('dist'));
+});
+
+gulp.task('serve', ['watchFiles']);
+
+gulp.task("default", ["clean"], function() {
+  gulp.start('build');
+});
