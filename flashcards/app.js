@@ -1,26 +1,33 @@
 const express = require('express');
-//created the express app
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
 const app = express();
 
-//express automatically looks for 'views' folder for templates
-//this can be set to changed if needed
+app.use(bodyParser.urlencoded({ extended: false}));
+app.use(cookieParser());
+app.use('/static', express.static('public'));
+
 app.set('view engine', 'pug');
 
+const mainRoutes = require('./routes');
+const cardRoutes = require('./routes/cards');
 
+app.use(mainRoutes);
+app.use('/cards', cardRoutes);
 
-//get() method is used to handle GET requests on a specified url
-app.get('/', (req, res) => {
-  //res.render will use pug to render the templates
-  //res.render(view, [locals], [callback]) [] indicates optional params
-  res.render('index');
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-app.get('/cards', (req, res) => {
-
-  res.render('card', {prompt: 'Who is buried in Grant\'s tomb', hint: 'Think about whos tomb it is'});
+app.use((err, req, res, next) => {
+  res.locals.error = err;
+  res.status(err.status);
+  res.render('error');
 });
 
-//creates the server when this file is ran with node
 app.listen(3000, () => {
-  console.log('The application is running on localhost:3000');
+    console.log('The application is running on localhost:3000!')
 });
