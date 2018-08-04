@@ -4,8 +4,6 @@ import Player from '../components/Player';
 import Header from '../components/Header';
 
 
-
-
 export default class Scoreboard extends Component{
   state = {
     players: [
@@ -26,17 +24,17 @@ export default class Scoreboard extends Component{
   onScoreChange = (index, delta) => {
     this.state.players[index].score += delta;
     this.setState(this.state);
-  }
+  };
 
   onAddPlayer = (name) => {
     this.state.players.push({ name: name, score: 0 });
     this.setState(this.state);
-  }
+  };
 
   onRemovePlayer = (index) => {
     this.state.players.splice(index, 1);
     this.setState(this.state);
-  }
+  };
 
   render() {
     return (
