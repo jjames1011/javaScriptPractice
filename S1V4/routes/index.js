@@ -100,7 +100,7 @@ router.post('/register', (req, res,next) => {
           password: req.body.password
       };
 
-      //use schemas create mothod to insert docyment into mongo
+      //use schemas create method to insert docyment into mongo
       User.create(userData, function( error, user){
         if (error) {
           return next(error);
