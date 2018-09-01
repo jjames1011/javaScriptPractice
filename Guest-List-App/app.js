@@ -9,14 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const div = document.createElement('div');
   const filterLabel = document.createElement('label');
   const filterCheckBox = document.createElement('input');
+  let invitedList = localStorage.getItem('items') ? JSON.parse(localStorage.getItem('items')) : [];
 
-  //check local storage for previous names 
-  const entryCount = parseInt(localStorage.getItem('keyCount'));
-  for(let i=0; i<entryCount; i++){
-    ul.append(createLI(localStorage.getItem(i)));
-  }
-
-
+  localStorage.setItem('items', JSON.stringify(invitedList));
+  const data = JSON.parse(localStorage.getItem('items'));
+  console.log(data);
+  console.log(localStorage.getItem('items'));
+  data.forEach(item => {
+    ul.appendChild(createLI(item));
+  });
 
   filterCheckBox.type = 'checkbox';
   filterLabel.textContent = "Hide those who haven't responded";
@@ -74,26 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const text = input.value;
-
-    function addToLocalStorage(value) {
-      let localStorageKeyCount;
-      if(localStorage.length === 0){
-        localStorageKeyCount = 0;
-        localStorage.setItem('keyCount', localStorageKeyCount);
-      }
-      localStorage.setItem(localStorage.getItem('keyCount'), value);
-      localStorageKeyCount = parseInt(localStorage.getItem('keyCount'));
-      localStorageKeyCount += 1;
-      localStorage.setItem('keyCount', localStorageKeyCount);
-
-    }
-
     if(text === '') {
       alert('Please fill in a name');
     } else {
       input.value = '';
       const li = createLI(text);
-      addToLocalStorage(text);
+      invitedList.push(text);
+      localStorage.setItem('items', JSON.stringify(invitedList));
       ul.appendChild(li);
     }
   });
@@ -119,9 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const nameActions = {
           remove: () => {
+            function remove(array, element){
+              const index = array.indexOf(element);
+              array.splice(index, 1);
+            }
               ul.removeChild(li)
+              remove(invitedList, li.childNodes[0].textContent);
+              localStorage.setItem('items', JSON.stringify(invitedList));
+              console.log(localStorage.getItem('items'));
+
             },
-          edit: () =>{
+          edit: () => {
               const spanElement = button.previousSibling.previousSibling;
               const editTextField = document.createElement('input');
               editTextField.type = 'text';
@@ -145,5 +141,4 @@ document.addEventListener('DOMContentLoaded', () => {
       nameActions[action]();
     }
   });
-
 });
